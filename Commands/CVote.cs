@@ -4,7 +4,6 @@ using Rocket.API.Commands;
 using Rocket.API.Plugins;
 using Rocket.API.User;
 using Rocket.Core.I18N;
-using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
 namespace Arechi.CallVote.Commands
@@ -30,17 +29,10 @@ namespace Arechi.CallVote.Commands
             _callVotePlugin = (CallVotePlugin)plugin;
         }
 
-        public bool SupportsUser(IUser user) => true;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
         public async Task ExecuteAsync(ICommandContext context)
         {
-            //Workaround so console still has permission to use the start childcommand
-            if (!(context.User is UnturnedUser))
-            {
-                await context.User.SendMessageAsync("UnturnedUser only!");
-                return;
-            }
-
             if (context.Parameters.Length != 1)
             {
                 await context.SendCommandUsage();

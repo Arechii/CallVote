@@ -14,8 +14,7 @@ namespace Arechi.CallVote
 
         public CallVotePlugin(IDependencyContainer container, ITaskScheduler taskScheduler, IUserManager userManager) : base("CallVote", container)
         {
-            container.RegisterSingletonType<VoteManager, VoteManager>();
-            VoteManager = container.Resolve<VoteManager>();
+            VoteManager = new VoteManager(this, taskScheduler, userManager);
         }
 
         protected override async Task OnActivate(bool isFromReload)

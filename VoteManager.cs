@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
-using Rocket.API.Plugins;
 using Rocket.API.Scheduling;
 using Rocket.API.User;
 using Rocket.Core.I18N;
@@ -13,16 +12,14 @@ namespace Arechi.CallVote
     public class VoteManager
     {
         private readonly CallVotePlugin _callVotePlugin;
-
         private readonly ITaskScheduler _taskScheduler;
-
         private readonly IUserManager _userManager;
 
         private List<ActiveVote> _activeVotes;
 
-        public VoteManager(IPlugin plugin, ITaskScheduler taskScheduler, IUserManager userManager)
+        public VoteManager(CallVotePlugin callVotePlugin, ITaskScheduler taskScheduler, IUserManager userManager)
         {
-            _callVotePlugin = (CallVotePlugin)plugin;
+            _callVotePlugin = callVotePlugin;
             _taskScheduler = taskScheduler;
             _userManager = userManager;
         }
@@ -59,14 +56,14 @@ namespace Arechi.CallVote
                 //await BroadcastAsync("Failure", activeVote.Name);
             }
 
-            //await BroadcastAsync("Cooldown", activeVote.Name, activeVote.Cooldown);
             activeVote.StartCooldown(this, _callVotePlugin, _taskScheduler);
+            //await BroadcastAsync("Cooldown", activeVote.Name, activeVote.Cooldown);
         }
 
         public void ReleaseVote(ActiveVote activeVote)
         {
-            //await BroadcastAsync("Release", activeVote.Name);
             _activeVotes.Remove(GetActiveVote(activeVote.Name));
+            //await BroadcastAsync("Release", activeVote.Name);
         }
 
         public bool CanStartVote(Vote vote, out int? cooldown)
