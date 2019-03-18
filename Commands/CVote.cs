@@ -35,7 +35,7 @@ namespace Arechi.CallVote.Commands
         {
             if (context.Parameters.Length != 1)
             {
-                await context.SendCommandUsage();
+                await context.SendCommandUsageAsync();
                 return;
             }
 
@@ -43,13 +43,13 @@ namespace Arechi.CallVote.Commands
 
             if (activeVote == null)
             {
-                await context.User.SendLocalizedMessage(_callVotePlugin.Translations, "Inactive", Color.Brown);
+                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "Inactive", Color.Brown);
                 return;
             }
 
             if (activeVote.InCooldown)
             {
-                await context.User.SendLocalizedMessage(_callVotePlugin.Translations, "Cooldown", Color.Brown,
+                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "Cooldown", Color.Brown,
                     activeVote.Name, activeVote.Cooldown);
                 return;
             }
