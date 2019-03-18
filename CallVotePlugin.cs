@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Threading.Tasks;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Scheduling;
 using Rocket.API.User;
+using Rocket.Core.I18N;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 
@@ -12,8 +14,11 @@ namespace Arechi.CallVote
     {
         public readonly VoteManager VoteManager;
 
+        private readonly IUserManager _userManager;
+
         public CallVotePlugin(IDependencyContainer container, ITaskScheduler taskScheduler, IUserManager userManager) : base("CallVote", container)
         {
+            _userManager = userManager;
             VoteManager = new VoteManager(this, taskScheduler, userManager);
         }
 
@@ -26,6 +31,18 @@ namespace Arechi.CallVote
         protected override async Task OnDeactivate()
         {
             Logger.LogInformation("Unloaded!");
+        }
+
+        internal async Task SendMessage(IUser user, string key, params object[] args)
+        {
+            await user.UserManager.BroadcastLocalizedAsync(Translations, key,
+                Color.FromName(ConfigurationInstance.Color), args);
+        }
+
+        internal async Task AnnounceMessage(string key, params object[] arguments)
+        {
+            await _userManager.BroadcastLocalizedAsync(Translations, key,
+                Color.FromName(ConfigurationInstance.Color), arguments);
         }
 
         public override Dictionary<string, string> DefaultTranslations => new Dictionary<string, string>

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
 using Rocket.API.Scheduling;
 using Rocket.API.User;
-using Rocket.Core.I18N;
 using Rocket.Core.Scheduling;
 
 namespace Arechi.CallVote
@@ -41,7 +39,7 @@ namespace Arechi.CallVote
             _taskScheduler.ScheduleDelayed(_callVotePlugin, () => FinishVote(activeVote),
                 "FinishVote" + activeVote.Name,
                 TimeSpan.FromSeconds(activeVote.Timer));
-            await BroadcastAsync("Start", activeVote.Name, activeVote.Alias, activeVote.Timer);
+            await _callVotePlugin.AnnounceMessage("Start", activeVote.Name, activeVote.Alias, activeVote.Timer);
         }
 
         private void FinishVote(ActiveVote activeVote)
@@ -49,21 +47,21 @@ namespace Arechi.CallVote
             if (activeVote.Success())
             {
                 activeVote.Execute();
-                //await BroadcastAsync("Success", activeVote.Name);
+                //await _callVotePlugin.AnnounceMessage("Success", activeVote.Name);
             }
             else
             {
-                //await BroadcastAsync("Failure", activeVote.Name);
+                //await _callVotePlugin.AnnounceMessage("Failure", activeVote.Name);
             }
 
             activeVote.StartCooldown(this, _callVotePlugin, _taskScheduler);
-            //await BroadcastAsync("Cooldown", activeVote.Name, activeVote.Cooldown);
+            //await _callVotePlugin.AnnounceMessage("Cooldown", activeVote.Name, activeVote.Cooldown);
         }
 
         public void ReleaseVote(ActiveVote activeVote)
         {
             _activeVotes.Remove(GetActiveVote(activeVote.Name));
-            //await BroadcastAsync("Release", activeVote.Name);
+            //await _callVotePlugin.AnnounceMessage("Release", activeVote.Name);
         }
 
         public bool CanStartVote(Vote vote, out int? cooldown)
@@ -72,11 +70,6 @@ namespace Arechi.CallVote
             cooldown = activeVote?.Cooldown + (activeVote?.InCooldown != null && activeVote.InCooldown ? 0 : activeVote?.Timer);
 
             return activeVote == null;
-        }
-
-        private async Task BroadcastAsync(string key, params object[] arguments)
-        {
-            await _userManager.BroadcastLocalizedAsync(_callVotePlugin.Translations, key, Color.Brown, arguments);
         }
     }
 }

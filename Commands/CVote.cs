@@ -1,9 +1,8 @@
-﻿using System.Drawing;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.Plugins;
 using Rocket.API.User;
-using Rocket.Core.I18N;
+using Rocket.Core.Commands;
 using Rocket.Unturned.Player;
 
 namespace Arechi.CallVote.Commands
@@ -35,22 +34,20 @@ namespace Arechi.CallVote.Commands
         {
             if (context.Parameters.Length != 1)
             {
-                await context.SendCommandUsageAsync();
-                return;
+                throw new CommandWrongUsageException("Missing arguments");
             }
 
             var activeVote = _callVotePlugin.VoteManager.GetActiveVote(await context.Parameters.GetAsync<string>(0));
 
             if (activeVote == null)
             {
-                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "Inactive", Color.Brown);
+                await _callVotePlugin.SendMessage(context.User, "Inactive");
                 return;
             }
 
             if (activeVote.InCooldown)
             {
-                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "Cooldown", Color.Brown,
-                    activeVote.Name, activeVote.Cooldown);
+                await _callVotePlugin.SendMessage(context.User, "Cooldown", activeVote.Name, activeVote.Cooldown);
                 return;
             }
 
@@ -59,8 +56,7 @@ namespace Arechi.CallVote.Commands
             if (activeVote.Voters.Contains(player)) return;
 
             activeVote.Voters.Add(player);
-            await context.User.UserManager.BroadcastLocalizedAsync(_callVotePlugin.Translations, "Status",
-                Color.Brown, activeVote.Name, activeVote.Status());
+            await _callVotePlugin.SendMessage(context.User, "Status", activeVote.Name, activeVote.Status());
         }
     }
 }

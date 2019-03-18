@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.User;
-using Rocket.Core.I18N;
-using Rocket.Core.User;
+using Rocket.Core.Commands;
 using SDG.Unturned;
 
 namespace Arechi.CallVote.Commands
@@ -37,8 +35,7 @@ namespace Arechi.CallVote.Commands
         {
             if (context.Parameters.Length < 1)
             {
-                await context.SendCommandUsageAsync();
-                return;
+                throw new CommandWrongUsageException("Missing arguments");
             }
 
             var voteName = await context.Parameters.GetAsync<string>(0);
@@ -50,21 +47,19 @@ namespace Arechi.CallVote.Commands
 
             if (vote == null)
             {
-                await context.User.SendMessageAsync(string.Join(", ", votes.Select(v => v.Name).ToArray()), Color.Brown);
+                await _callVotePlugin.SendMessage(context.User, string.Join(", ", votes.Select(v => v.Name).ToArray()));
                 return;
             }
 
             if (!_callVotePlugin.VoteManager.CanStartVote(vote, out var cooldown))
             {
-                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "Cooldown", Color.Brown, 
-                    vote.Name, cooldown);
+                await _callVotePlugin.SendMessage(context.User, "Cooldown", vote.Name, cooldown);
                 return;
             }
 
             if (Provider.clients.Count < vote.MinimumPlayers)
             {
-                await context.User.SendLocalizedMessageAsync(_callVotePlugin.Translations, "MinPlayers", Color.Brown,
-                    vote.Name, vote.MinimumPlayers);
+                await _callVotePlugin.SendMessage(context.User, "MinPlayers", vote.Name, vote.MinimumPlayers);
                 return;
             }
 
