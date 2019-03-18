@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Rocket.API.Scheduling;
-using Rocket.API.User;
 using Rocket.Core.Scheduling;
 
 namespace Arechi.CallVote
@@ -11,15 +10,13 @@ namespace Arechi.CallVote
     {
         private readonly CallVotePlugin _callVotePlugin;
         private readonly ITaskScheduler _taskScheduler;
-        private readonly IUserManager _userManager;
 
         private List<ActiveVote> _activeVotes;
 
-        public VoteManager(CallVotePlugin callVotePlugin, ITaskScheduler taskScheduler, IUserManager userManager)
+        public VoteManager(CallVotePlugin callVotePlugin, ITaskScheduler taskScheduler)
         {
             _callVotePlugin = callVotePlugin;
             _taskScheduler = taskScheduler;
-            _userManager = userManager;
         }
 
         public void Load()
