@@ -4,7 +4,7 @@ namespace Arechi.CallVote
 {
     public class Config
     {
-        public string Color = "Yellow";
+        public string Color { get; set; } = "Yellow";
 
         public List<Vote> Votes { get; set; } = new List<Vote>
         {
