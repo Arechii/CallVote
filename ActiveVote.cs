@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rocket.API.Plugins;
 using Rocket.API.Scheduling;
+using Rocket.Core.Scheduling;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
@@ -16,7 +17,7 @@ namespace Arechi.CallVote
 
         public bool InCooldown { get; set; }
 
-        private ITask _cooldownTask;
+        private IScheduledTask _cooldownTask;
 
         public ActiveVote(Vote vote, IEnumerable<string> arguments) : base(vote.Name, vote.Alias, vote.Command, vote.Timer, vote.Cooldown, vote.MinimumPlayers)
         {
@@ -32,11 +33,11 @@ namespace Arechi.CallVote
         public void StartCooldown(VoteManager voteManager, IPlugin plugin, ITaskScheduler taskScheduler)
         {
             InCooldown = true;
-            _cooldownTask = taskScheduler.SchedulePeriodically(plugin, () =>
+            _cooldownTask = taskScheduler.ScheduleTaskPeriodically(plugin, async () =>
             {
                 if (--Cooldown > 0) return;
 
-                voteManager.ReleaseVote(this);
+                await voteManager.ReleaseVote(this);
                 taskScheduler.CancelTask(_cooldownTask);
             }, "CooldownVote" + Name, TimeSpan.FromSeconds(1));
         }

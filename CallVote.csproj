@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rocket.Core" Version="5.0.0.660" />
-    <PackageReference Include="Rocket.Unturned" Version="5.0.0.232" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.662" />
+    <PackageReference Include="Rocket.Unturned" Version="5.0.0.236" />
   </ItemGroup>
 
   <ItemGroup>

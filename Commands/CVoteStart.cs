@@ -41,7 +41,7 @@ namespace Arechi.CallVote.Commands
             var voteName = await context.Parameters.GetAsync<string>(0);
             var argLine = context.Parameters.Skip(1);
             var votes = _callVotePlugin.ConfigurationInstance.Votes;
-            var vote = votes.Find(v =>
+            var vote = votes.FirstOrDefault(v =>
                 v.Name.Equals(voteName, StringComparison.OrdinalIgnoreCase) ||
                 v.Alias.Equals(voteName, StringComparison.OrdinalIgnoreCase));
 

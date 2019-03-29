@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Rocket.API.Scheduling;
 using Rocket.Core.Scheduling;
@@ -24,7 +25,7 @@ namespace Arechi.CallVote
             _activeVotes = new List<ActiveVote>();
         }
 
-        public ActiveVote GetActiveVote(string name) => _activeVotes.Find(v =>
+        public ActiveVote GetActiveVote(string name) => _activeVotes.FirstOrDefault(v =>
             v.Name.Equals(name, StringComparison.OrdinalIgnoreCase) ||
             v.Alias.Equals(name, StringComparison.OrdinalIgnoreCase));
 
@@ -33,32 +34,32 @@ namespace Arechi.CallVote
             var activeVote = new ActiveVote(vote, arguments);
 
             _activeVotes.Add(activeVote);
-            _taskScheduler.ScheduleDelayed(_callVotePlugin, () => FinishVote(activeVote),
+            _taskScheduler.ScheduleTaskDelayed(_callVotePlugin, async () => await FinishVote(activeVote),
                 "FinishVote" + activeVote.Name,
                 TimeSpan.FromSeconds(activeVote.Timer));
             await _callVotePlugin.AnnounceMessage("Start", activeVote.Name, activeVote.Alias, activeVote.Timer);
         }
 
-        private void FinishVote(ActiveVote activeVote)
+        private async Task FinishVote(ActiveVote activeVote)
         {
             if (activeVote.Success())
             {
                 activeVote.Execute();
-                //await _callVotePlugin.AnnounceMessage("Success", activeVote.Name);
+                await _callVotePlugin.AnnounceMessage("Success", activeVote.Name);
             }
             else
             {
-                //await _callVotePlugin.AnnounceMessage("Failure", activeVote.Name);
+                await _callVotePlugin.AnnounceMessage("Failure", activeVote.Name);
             }
 
             activeVote.StartCooldown(this, _callVotePlugin, _taskScheduler);
-            //await _callVotePlugin.AnnounceMessage("Cooldown", activeVote.Name, activeVote.Cooldown);
+            await _callVotePlugin.AnnounceMessage("Cooldown", activeVote.Name, activeVote.Cooldown);
         }
 
-        public void ReleaseVote(ActiveVote activeVote)
+        public async Task ReleaseVote(ActiveVote activeVote)
         {
             _activeVotes.Remove(GetActiveVote(activeVote.Name));
-            //await _callVotePlugin.AnnounceMessage("Release", activeVote.Name);
+            await _callVotePlugin.AnnounceMessage("Release", activeVote.Name);
         }
 
         public bool CanStartVote(Vote vote, out int? cooldown)
