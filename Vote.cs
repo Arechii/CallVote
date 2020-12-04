@@ -9,145 +9,145 @@ using UnityEngine;
 
 namespace Arechi.CallVote
 {
-	public class Vote : IVote
-	{
-		public VoteSettings Settings { get; set; }
+    public class Vote : IVote
+    {
+        public VoteSettings Settings { get; set; }
 
-		public List<string> Arguments { get; set; }
+        public List<string> Arguments { get; set; }
 
-		public List<ulong> Voters { get; set; } = new List<ulong>();
+        public List<ulong> Voters { get; set; } = new List<ulong>();
 
-		public VoteStatus Status { get; set; } = VoteStatus.Ready;
+        public VoteStatus Status { get; set; } = VoteStatus.Ready;
 
-		public int CooldownTime { get; protected set; }
+        public int CooldownTime { get; protected set; }
 
-		public Vote(VoteSettings settings)
-		{
-			Settings = settings;
-		}
+        public Vote(VoteSettings settings)
+        {
+            Settings = settings;
+        }
 
-		public int GetPercentage()
-		{
-			return (int)(decimal.Divide(Voters.Count, Provider.clients.Count == 0 ? 1 : Provider.clients.Count) * 100);
-		}
+        public int GetPercentage()
+        {
+            return (int)(decimal.Divide(Voters.Count, Provider.clients.Count == 0 ? 1 : Provider.clients.Count) * 100);
+        }
 
-		public VoteResult GetResult()
-		{
-			return GetPercentage() >= Settings.RequiredPercent ? VoteResult.Success : VoteResult.Failure;
-		}
+        public VoteResult GetResult()
+        {
+            return GetPercentage() >= Settings.RequiredPercent ? VoteResult.Success : VoteResult.Failure;
+        }
 
-		private void StartCoroutine(IEnumerator coroutine)
-		{
-			Plugin.Instance.StartCoroutine(coroutine);
-		}
+        private void StartCoroutine(IEnumerator coroutine)
+        {
+            Plugin.Instance.StartCoroutine(coroutine);
+        }
 
-		private void StopCoroutine(IEnumerator coroutine)
-		{
-			Plugin.Instance.StopCoroutine(coroutine);
-		}
+        private void StopCoroutine(IEnumerator coroutine)
+        {
+            Plugin.Instance.StopCoroutine(coroutine);
+        }
 
-		public void Start(List<string> arguments)
-		{
-			if (!CanStart(arguments)) return;
+        public void Start(List<string> arguments)
+        {
+            if (!CanStart(arguments)) return;
 
-			Status = VoteStatus.Ongoing;
-			Arguments = arguments;
+            Status = VoteStatus.Ongoing;
+            Arguments = arguments;
 
-			SendMessage("START", Settings.Alias);
-			StartCoroutine(Start());
-		}
+            SendMessage("START", Settings.Alias);
+            StartCoroutine(Start());
+        }
 
-		protected IEnumerator Start()
-		{
-			var time = Settings.Timer;
+        protected IEnumerator Start()
+        {
+            var time = Settings.Timer;
 
-			while (time != 0)
-			{
-				yield return new WaitForSeconds(1f);
-				time--;
-			}
+            while (time != 0)
+            {
+                yield return new WaitForSeconds(1f);
+                time--;
+            }
 
-			Stop();
-		}
+            Stop();
+        }
 
-		protected bool CanStart(List<string> arguments)
-		{
-			if (Status == VoteStatus.CoolingDown)
-				throw new VoteStartException("COOLING_DOWN", CooldownTime);
+        protected bool CanStart(List<string> arguments)
+        {
+            if (Status == VoteStatus.CoolingDown)
+                throw new VoteStartException("COOLING_DOWN", CooldownTime);
 
-			if (arguments.Count < Settings.MinimumArguments)
-				throw new VoteStartException("NOT_ENOUGH_ARGUMENTS", Settings.MinimumArguments);
+            if (arguments.Count < Settings.MinimumArguments)
+                throw new VoteStartException("NOT_ENOUGH_ARGUMENTS", Settings.MinimumArguments);
 
-			if (Provider.clients.Count < Settings.MinimumPlayers)
-				throw new VoteStartException("NOT_ENOUGH_PLAYERS", Settings.MinimumPlayers);
+            if (Provider.clients.Count < Settings.MinimumPlayers)
+                throw new VoteStartException("NOT_ENOUGH_PLAYERS", Settings.MinimumPlayers);
 
-			return true;
-		}
+            return true;
+        }
 
-		public void AddVote(UnturnedPlayer player)
-		{
-			if (Voters.Contains(player.CSteamID.m_SteamID)) return;
+        public void AddVote(UnturnedPlayer player)
+        {
+            if (Voters.Contains(player.CSteamID.m_SteamID)) return;
 
-			Voters.Add(player.CSteamID.m_SteamID);
-			SendMessage("RESULT", GetPercentage(), Settings.RequiredPercent);
+            Voters.Add(player.CSteamID.m_SteamID);
+            SendMessage("RESULT", GetPercentage(), Settings.RequiredPercent);
 
-			if (GetResult() != VoteResult.Success) return;
+            if (GetResult() != VoteResult.Success) return;
 
-			StopCoroutine(Start());
-			Stop();
-		}
+            StopCoroutine(Start());
+            Stop();
+        }
 
-		public void Stop()
-		{
-			if (GetResult() == VoteResult.Failure)
-			{
-				SendMessage("FAILURE");
-				Cooldown();
-				return;
-			}
+        public void Stop()
+        {
+            if (GetResult() == VoteResult.Failure)
+            {
+                SendMessage("FAILURE");
+                Cooldown();
+                return;
+            }
 
-			var command = new List<string> { Settings.Command };
+            var command = new List<string> { Settings.Command };
 
-			if (Arguments != null)
-				command.AddRange(Arguments);
+            if (Arguments != null)
+                command.AddRange(Arguments);
 
-			SendMessage("SUCCESS");
-			R.Commands.Execute(new ConsolePlayer(), string.Join(" ", command));
-			Cooldown();
-		}
+            SendMessage("SUCCESS");
+            R.Commands.Execute(new ConsolePlayer(), string.Join(" ", command));
+            Cooldown();
+        }
 
-		public void Cooldown()
-		{
-			Status = VoteStatus.CoolingDown;
+        public void Cooldown()
+        {
+            Status = VoteStatus.CoolingDown;
 
-			SendMessage("COOLDOWN", Settings.CooldownTime);
-			StartCoroutine(Cooldown(Settings.CooldownTime));
-		}
+            SendMessage("COOLDOWN", Settings.CooldownTime);
+            StartCoroutine(Cooldown(Settings.CooldownTime));
+        }
 
-		protected IEnumerator Cooldown(int cooldown)
-		{
-			CooldownTime = cooldown;
+        protected IEnumerator Cooldown(int cooldown)
+        {
+            CooldownTime = cooldown;
 
-			while (CooldownTime != 0)
-			{
-				yield return new WaitForSeconds(1f);
-				CooldownTime--;
-			}
+            while (CooldownTime != 0)
+            {
+                yield return new WaitForSeconds(1f);
+                CooldownTime--;
+            }
 
-			Voters.Clear();
-			Status = VoteStatus.Ready;
-			SendMessage("READY");
-		}
+            Voters.Clear();
+            Status = VoteStatus.Ready;
+            SendMessage("READY");
+        }
 
-		protected void SendMessage(string translationKey, params object[] args)
-		{
-			var message = Plugin.Instance.Translate("VOTE_CHAT_FORMAT")
-				.Replace("{color}", $"<color={Settings.Color}>")
-				.Replace("{/color}", "</color>")
-				.Replace("{vote}", $"{Settings.Name}{(Arguments.Any() ? " " + string.Join(" ", Arguments) : "")}")
-				.Replace("{text}", Plugin.Instance.Translate(translationKey, args));
+        protected void SendMessage(string translationKey, params object[] args)
+        {
+            var message = Plugin.Instance.Translate("VOTE_CHAT_FORMAT")
+                .Replace("{color}", $"<color={Settings.Color}>")
+                .Replace("{/color}", "</color>")
+                .Replace("{vote}", $"{Settings.Name}{(Arguments.Any() ? " " + string.Join(" ", Arguments) : "")}")
+                .Replace("{text}", Plugin.Instance.Translate(translationKey, args));
 
-			Plugin.Broadcast(message, Settings.Icon, Color.white);
-		}
-	}
+            Plugin.Broadcast(message, Settings.Icon, Color.white);
+        }
+    }
 }
