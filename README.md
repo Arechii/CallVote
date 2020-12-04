@@ -8,6 +8,7 @@ RocketMod 4 plugin for Unturned to vote for things to happen.
 - The custom votes such as AirdropAll, ItemAll, etc. are now standalone commands.
 - Third party plugins can add their own votes.
 - You can pass arguments to each vote's command.
+- Better reliability, performance and accuracy.
 
 ## Votes
 You can turn any vanilla or RocketMod (plugin) command into a vote, along with some custom votes:
