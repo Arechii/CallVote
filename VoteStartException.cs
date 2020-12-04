@@ -6,12 +6,12 @@ namespace Arechi.CallVote
     {
         public VoteStartException(string translationKey) : this(translationKey, Array.Empty<object>())
         {
-            
+
         }
 
         public VoteStartException(string translationKey, params object[] args) : base(Plugin.Instance.Translate(translationKey, args))
         {
-            
+
         }
     }
 }

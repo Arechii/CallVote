@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace Arechi.CallVote
 {
-    public class Vote : IVote
-    {
+	public class Vote : IVote
+	{
 		public VoteSettings Settings { get; set; }
 
 		public List<string> Arguments { get; set; }
@@ -37,17 +37,17 @@ namespace Arechi.CallVote
 		}
 
 		private void StartCoroutine(IEnumerator coroutine)
-        {
+		{
 			Plugin.Instance.StartCoroutine(coroutine);
-        }
+		}
 
 		private void StopCoroutine(IEnumerator coroutine)
-        {
+		{
 			Plugin.Instance.StopCoroutine(coroutine);
-        }
+		}
 
 		public void Start(List<string> arguments)
-        {
+		{
 			if (!CanStart(arguments)) return;
 
 			Status = VoteStatus.Ongoing;
@@ -55,23 +55,23 @@ namespace Arechi.CallVote
 
 			SendMessage("START", Settings.Alias);
 			StartCoroutine(Start());
-        }
+		}
 
 		protected IEnumerator Start()
-        {
+		{
 			var time = Settings.Timer;
 
 			while (time != 0)
-            {
+			{
 				yield return new WaitForSeconds(1f);
 				time--;
 			}
 
 			Stop();
-        }
+		}
 
 		protected bool CanStart(List<string> arguments)
-        {
+		{
 			if (Status == VoteStatus.CoolingDown)
 				throw new VoteStartException("COOLING_DOWN", CooldownTime);
 
@@ -82,10 +82,10 @@ namespace Arechi.CallVote
 				throw new VoteStartException("NOT_ENOUGH_PLAYERS", Settings.MinimumPlayers);
 
 			return true;
-        }
+		}
 
 		public void AddVote(UnturnedPlayer player)
-        {
+		{
 			if (Voters.Contains(player.CSteamID.m_SteamID)) return;
 
 			Voters.Add(player.CSteamID.m_SteamID);
@@ -98,7 +98,7 @@ namespace Arechi.CallVote
 		}
 
 		public void Stop()
-        {
+		{
 			if (GetResult() == VoteResult.Failure)
 			{
 				SendMessage("FAILURE");
@@ -114,25 +114,25 @@ namespace Arechi.CallVote
 			SendMessage("SUCCESS");
 			R.Commands.Execute(new ConsolePlayer(), string.Join(" ", command));
 			Cooldown();
-        }
+		}
 
 		public void Cooldown()
-        {
+		{
 			Status = VoteStatus.CoolingDown;
 
 			SendMessage("COOLDOWN", Settings.CooldownTime);
 			StartCoroutine(Cooldown(Settings.CooldownTime));
-        }
+		}
 
 		protected IEnumerator Cooldown(int cooldown)
-        {
+		{
 			CooldownTime = cooldown;
 
 			while (CooldownTime != 0)
-            {
+			{
 				yield return new WaitForSeconds(1f);
 				CooldownTime--;
-            }
+			}
 
 			Voters.Clear();
 			Status = VoteStatus.Ready;
@@ -140,7 +140,7 @@ namespace Arechi.CallVote
 		}
 
 		protected void SendMessage(string translationKey, params object[] args)
-        {
+		{
 			var message = Plugin.Instance.Translate("VOTE_CHAT_FORMAT")
 				.Replace("{color}", $"<color={Settings.Color}>")
 				.Replace("{/color}", "</color>")
@@ -148,6 +148,6 @@ namespace Arechi.CallVote
 				.Replace("{text}", Plugin.Instance.Translate(translationKey, args));
 
 			Plugin.Broadcast(message, Settings.Icon, Color.white);
-        }
-    }
+		}
+	}
 }

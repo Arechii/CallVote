@@ -33,16 +33,16 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 item = items.FirstOrDefault(i => i.id == itemId);
             }
 
-			foreach (var player in Provider.clients.Select(UnturnedPlayer.FromSteamPlayer))
-			{
+            foreach (var player in Provider.clients.Select(UnturnedPlayer.FromSteamPlayer))
+            {
                 var playerItem = item ?? items[random.Next(items.Length)];
 
-				player.GiveItem(playerItem.id, 1);
+                player.GiveItem(playerItem.id, 1);
                 Plugin.NotifyPlayer(player, Plugin.Instance.Translate("ITEM_ALL_RECEIVED", playerItem.itemName));
-			}
+            }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("ITEM_ALL", 
+            Plugin.Broadcast(Plugin.Instance.Translate("ITEM_ALL",
                 item != null ? item.itemName : Plugin.Instance.Translate("RANDOM_ITEM")));
-		}
+        }
     }
 }

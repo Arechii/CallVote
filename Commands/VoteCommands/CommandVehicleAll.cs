@@ -41,7 +41,7 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 Plugin.NotifyPlayer(player, Plugin.Instance.Translate("VEHICLE_ALL_RECEIVED", playerVehicle.vehicleName));
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("VEHICLE_ALL", vehicle != null ? 
+            Plugin.Broadcast(Plugin.Instance.Translate("VEHICLE_ALL", vehicle != null ?
                 vehicle.vehicleName : Plugin.Instance.Translate("RANDOM_VEHICLE")));
         }
     }

@@ -25,16 +25,16 @@ namespace Arechi.CallVote.Commands.VoteCommands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-			var airdropNodeIds = LevelNodes.nodes.Where(n => n.type == ENodeType.AIRDROP).Cast<AirdropNode>().Select(n => n.id).ToArray();
+            var airdropNodeIds = LevelNodes.nodes.Where(n => n.type == ENodeType.AIRDROP).Cast<AirdropNode>().Select(n => n.id).ToArray();
 
-			foreach (var player in Provider.clients.Select(UnturnedPlayer.FromSteamPlayer))
-			{
-				int index = random.Next(airdropNodeIds.Length);
+            foreach (var player in Provider.clients.Select(UnturnedPlayer.FromSteamPlayer))
+            {
+                int index = random.Next(airdropNodeIds.Length);
 
-				LevelManager.airdrop(player.Position, airdropNodeIds[index], 128f);
-			}
+                LevelManager.airdrop(player.Position, airdropNodeIds[index], 128f);
+            }
 
             Plugin.Broadcast(Plugin.Instance.Translate("AIRDROP_ALL"));
-		}
+        }
     }
 }

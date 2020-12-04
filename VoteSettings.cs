@@ -2,8 +2,8 @@
 
 namespace Arechi.CallVote
 {
-    public class VoteSettings : IVoteSettings
-    {
+	public class VoteSettings : IVoteSettings
+	{
 		[XmlAttribute("Name")]
 		public string Name { get; set; }
 
@@ -39,9 +39,9 @@ namespace Arechi.CallVote
 
 		public VoteSettings() { }
 
-		public VoteSettings(string name, string alias, string command, int minArgs = 0, string color = "#fff333", string icon = "", 
+		public VoteSettings(string name, string alias, string command, int minArgs = 0, string color = "#fff333", string icon = "",
 			bool enabled = true, int minPlayers = 1, int reqPercent = 50, int timer = 60, int cooldown = 300)
-        {
+		{
 			Name = name;
 			Alias = alias;
 			Command = command;
@@ -53,6 +53,6 @@ namespace Arechi.CallVote
 			RequiredPercent = reqPercent;
 			Timer = timer;
 			CooldownTime = cooldown;
-        }
-    }
+		}
+	}
 }
