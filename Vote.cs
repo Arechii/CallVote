@@ -19,8 +19,6 @@ namespace Arechi.CallVote
 
         public VoteStatus Status { get; set; } = VoteStatus.Ready;
 
-        // Cyphierion Edits
-
         public Coroutine thisCoroutine1 { get; set; }
 
         public Coroutine thisCoroutine2 { get; set; }
@@ -42,18 +40,6 @@ namespace Arechi.CallVote
             return GetPercentage() >= Settings.RequiredPercent ? VoteResult.Success : VoteResult.Failure;
         }
 
-        // Cyphierion Edits
-
-        //private void StartCoroutine(IEnumerator coroutine)
-        //{
-        //    Plugin.Instance.StartCoroutine(coroutine);
-        //}
-
-        //private void StopCoroutine(IEnumerator coroutine)
-        //{
-        //    Plugin.Instance.StopCoroutine(coroutine);
-        //}
-
         public void Start(List<string> arguments)
         {
             if (!CanStart(arguments)) return;
@@ -72,8 +58,6 @@ namespace Arechi.CallVote
 
             while (time != 0)
             {
-                //if (Status != VoteStatus.Ongoing) yield return 0;
-
                 yield return new WaitForSeconds(1f);
                 time--;
             }
@@ -104,7 +88,6 @@ namespace Arechi.CallVote
 
             if (GetResult() != VoteResult.Success) return;
 
-            // Cyphierion Edits
             Plugin.Instance.StopCoroutine(thisCoroutine1);
             Stop();
         }
@@ -135,7 +118,6 @@ namespace Arechi.CallVote
             SendMessage("COOLDOWN", Settings.CooldownTime);
             thisCoroutine2 = Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
 
-            // Cyphierion Edits
             Plugin.Instance.StopCoroutine(thisCoroutine1);
         }
 

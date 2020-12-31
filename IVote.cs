@@ -14,7 +14,6 @@ namespace Arechi.CallVote
 
         VoteStatus Status { get; set; }
 
-        // Cyphierion Edits
         Coroutine thisCoroutine1 { get; set; }
 
         Coroutine thisCoroutine2 { get; set; }
