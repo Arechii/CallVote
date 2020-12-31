@@ -19,6 +19,12 @@ namespace Arechi.CallVote
 
         public VoteStatus Status { get; set; } = VoteStatus.Ready;
 
+        // Cyphierion Edits
+
+        public Coroutine thisCoroutine1 { get; set; }
+
+        public Coroutine thisCoroutine2 { get; set; }
+
         public int CooldownTime { get; protected set; }
 
         public Vote(VoteSettings settings)
@@ -36,15 +42,17 @@ namespace Arechi.CallVote
             return GetPercentage() >= Settings.RequiredPercent ? VoteResult.Success : VoteResult.Failure;
         }
 
-        private void StartCoroutine(IEnumerator coroutine)
-        {
-            Plugin.Instance.StartCoroutine(coroutine);
-        }
+        // Cyphierion Edits
 
-        private void StopCoroutine(IEnumerator coroutine)
-        {
-            Plugin.Instance.StopCoroutine(coroutine);
-        }
+        //private void StartCoroutine(IEnumerator coroutine)
+        //{
+        //    Plugin.Instance.StartCoroutine(coroutine);
+        //}
+
+        //private void StopCoroutine(IEnumerator coroutine)
+        //{
+        //    Plugin.Instance.StopCoroutine(coroutine);
+        //}
 
         public void Start(List<string> arguments)
         {
@@ -54,7 +62,8 @@ namespace Arechi.CallVote
             Arguments = arguments;
 
             SendMessage("START", Settings.Alias);
-            StartCoroutine(Start());
+
+            thisCoroutine1 = Plugin.Instance.StartCoroutine(Start());
         }
 
         protected IEnumerator Start()
@@ -63,6 +72,8 @@ namespace Arechi.CallVote
 
             while (time != 0)
             {
+                //if (Status != VoteStatus.Ongoing) yield return 0;
+
                 yield return new WaitForSeconds(1f);
                 time--;
             }
@@ -93,7 +104,8 @@ namespace Arechi.CallVote
 
             if (GetResult() != VoteResult.Success) return;
 
-            StopCoroutine(Start());
+            // Cyphierion Edits
+            Plugin.Instance.StopCoroutine(thisCoroutine1);
             Stop();
         }
 
@@ -121,7 +133,10 @@ namespace Arechi.CallVote
             Status = VoteStatus.CoolingDown;
 
             SendMessage("COOLDOWN", Settings.CooldownTime);
-            StartCoroutine(Cooldown(Settings.CooldownTime));
+            thisCoroutine2 = Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
+
+            // Cyphierion Edits
+            Plugin.Instance.StopCoroutine(thisCoroutine1);
         }
 
         protected IEnumerator Cooldown(int cooldown)

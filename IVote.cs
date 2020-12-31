@@ -1,4 +1,5 @@
 ﻿using Rocket.Unturned.Player;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Arechi.CallVote
@@ -12,6 +13,11 @@ namespace Arechi.CallVote
         List<ulong> Voters { get; set; }
 
         VoteStatus Status { get; set; }
+
+        // Cyphierion Edits
+        Coroutine thisCoroutine1 { get; set; }
+
+        Coroutine thisCoroutine2 { get; set; }
 
         VoteResult GetResult();
 
