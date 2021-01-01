@@ -19,11 +19,11 @@ namespace Arechi.CallVote
 
         public VoteStatus Status { get; set; } = VoteStatus.Ready;
 
-        public Coroutine thisCoroutine1 { get; set; }
-
-        public Coroutine thisCoroutine2 { get; set; }
-
         public int CooldownTime { get; protected set; }
+
+        private Coroutine _startCoroutine;
+
+        private Coroutine _cooldownCoroutine;
 
         public Vote(VoteSettings settings)
         {
@@ -49,7 +49,7 @@ namespace Arechi.CallVote
 
             SendMessage("START", Settings.Alias);
 
-            thisCoroutine1 = Plugin.Instance.StartCoroutine(Start());
+            _startCoroutine = Plugin.Instance.StartCoroutine(Start());
         }
 
         protected IEnumerator Start()
@@ -88,7 +88,7 @@ namespace Arechi.CallVote
 
             if (GetResult() != VoteResult.Success) return;
 
-            Plugin.Instance.StopCoroutine(thisCoroutine1);
+            Plugin.Instance.StopCoroutine(_startCoroutine);
             Stop();
         }
 
@@ -116,9 +116,9 @@ namespace Arechi.CallVote
             Status = VoteStatus.CoolingDown;
 
             SendMessage("COOLDOWN", Settings.CooldownTime);
-            thisCoroutine2 = Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
+            _cooldownCoroutine = Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
 
-            Plugin.Instance.StopCoroutine(thisCoroutine1);
+            Plugin.Instance.StopCoroutine(_startCoroutine);
         }
 
         protected IEnumerator Cooldown(int cooldown)

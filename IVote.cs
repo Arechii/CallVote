@@ -14,10 +14,6 @@ namespace Arechi.CallVote
 
         VoteStatus Status { get; set; }
 
-        Coroutine thisCoroutine1 { get; set; }
-
-        Coroutine thisCoroutine2 { get; set; }
-
         VoteResult GetResult();
 
         void Start(List<string> arguments);
