@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System;
@@ -38,10 +39,10 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 var playerItem = item ?? items[random.Next(items.Length)];
 
                 player.GiveItem(playerItem.id, 1);
-                Plugin.NotifyPlayer(player, Plugin.Instance.Translate("ITEM_ALL_RECEIVED", playerItem.itemName));
+                player.SendMessage(Plugin.Instance.Translate("ITEM_ALL_RECEIVED", playerItem.itemName));
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("ITEM_ALL",
+            ChatUtil.Broadcast(Plugin.Instance.Translate("ITEM_ALL",
                 item != null ? item.itemName : Plugin.Instance.Translate("RANDOM_ITEM")));
         }
     }

@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Arechi.CallVote.Commands
 
             if (command.Length == 0)
             {
-                Plugin.NotifyPlayer(player, $"/{Name} {Syntax}", Color.red);
+                player.SendMessage($"/{Name} {Syntax}", Color.red);
                 return;
             }
 
@@ -39,7 +40,7 @@ namespace Arechi.CallVote.Commands
 
             if (vote == null)
             {
-                Plugin.NotifyPlayer(player, Plugin.Instance.Translate("VOTE_NOT_FOUND", voteName), Color.red);
+                player.SendMessage(Plugin.Instance.Translate("VOTE_NOT_FOUND", voteName), Color.red);
                 return;
             }
 
@@ -58,7 +59,7 @@ namespace Arechi.CallVote.Commands
             }
             catch (VoteStartException ex)
             {
-                Plugin.NotifyPlayer(player, ex.Message, Color.red);
+                player.SendMessage(ex.Message, Color.red);
             }
         }
     }

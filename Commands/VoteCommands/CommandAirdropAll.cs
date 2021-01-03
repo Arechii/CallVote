@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System;
@@ -34,7 +35,7 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 LevelManager.airdrop(player.Position, airdropNodeIds[index], 128f);
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("AIRDROP_ALL"));
+            ChatUtil.Broadcast(Plugin.Instance.Translate("AIRDROP_ALL"));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System;
@@ -38,10 +39,10 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 var playerVehicle = vehicle ?? vehicles[random.Next(vehicles.Length)];
 
                 player.GiveVehicle(playerVehicle.id);
-                Plugin.NotifyPlayer(player, Plugin.Instance.Translate("VEHICLE_ALL_RECEIVED", playerVehicle.vehicleName));
+                player.SendMessage(Plugin.Instance.Translate("VEHICLE_ALL_RECEIVED", playerVehicle.vehicleName));
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("VEHICLE_ALL", vehicle != null ?
+            ChatUtil.Broadcast(Plugin.Instance.Translate("VEHICLE_ALL", vehicle != null ?
                 vehicle.vehicleName : Plugin.Instance.Translate("RANDOM_VEHICLE")));
         }
     }

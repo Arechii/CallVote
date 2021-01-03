@@ -1,10 +1,7 @@
 ﻿using Rocket.API.Collections;
 using Rocket.Core.Plugins;
-using Rocket.Unturned.Player;
-using SDG.Unturned;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Arechi.CallVote
 {
@@ -22,16 +19,6 @@ namespace Arechi.CallVote
         protected override void Unload()
         {
             Instance = null;
-        }
-
-        public static void Broadcast(string message, string icon = null, Color? color = null)
-        {
-            ChatManager.serverSendMessage(message, color ?? Color.yellow, iconURL: icon, useRichTextFormatting: true);
-        }
-
-        public static void NotifyPlayer(UnturnedPlayer player, string message, Color? color = null)
-        {
-            ChatManager.serverSendMessage(message, color ?? Color.yellow, toPlayer: player.SteamPlayer(), useRichTextFormatting: true);
         }
 
         public override TranslationList DefaultTranslations => new TranslationList

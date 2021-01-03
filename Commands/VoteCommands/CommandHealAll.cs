@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 player.Infection = 0;
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("HEAL_ALL"));
+            ChatUtil.Broadcast(Plugin.Instance.Translate("HEAL_ALL"));
         }
     }
 }

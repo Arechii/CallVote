@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -144,7 +145,7 @@ namespace Arechi.CallVote
                 .Replace("{vote}", $"{Settings.Name}{(Arguments.Any() ? " " + string.Join(" ", Arguments) : "")}")
                 .Replace("{text}", Plugin.Instance.Translate(translationKey, args));
 
-            Plugin.Broadcast(message, Settings.Icon, Color.white);
+            ChatUtil.Broadcast(message, Settings.Icon, Color.white);
         }
     }
 }

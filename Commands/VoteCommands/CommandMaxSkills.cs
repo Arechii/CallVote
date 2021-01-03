@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using Arechi.CallVote.Utils;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Skills;
 using SDG.Unturned;
@@ -40,7 +41,7 @@ namespace Arechi.CallVote.Commands.VoteCommands
                 }
             }
 
-            Plugin.Broadcast(Plugin.Instance.Translate("MAX_SKILLS"));
+            ChatUtil.Broadcast(Plugin.Instance.Translate("MAX_SKILLS"));
         }
     }
 }
