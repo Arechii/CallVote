@@ -11,12 +11,12 @@ namespace Arechi.CallVote
     public class Plugin : RocketPlugin<Configuration>
     {
         public static Plugin Instance;
-        public List<Vote> Votes;
+        public List<IVote> Votes;
 
         protected override void Load()
         {
             Instance = this;
-            Votes = Configuration.Instance.Votes.Select(v => new Vote(v)).ToList();
+            Votes = Configuration.Instance.Votes.Select(v => new Vote(v)).ToList<IVote>();
         }
 
         protected override void Unload()
