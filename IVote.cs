@@ -13,6 +13,8 @@ namespace Arechi.CallVote
 
         VoteStatus Status { get; set; }
 
+        int CooldownTime { get; set; }
+
         VoteResult GetResult();
 
         void Start(List<string> arguments);

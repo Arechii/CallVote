@@ -20,7 +20,7 @@ namespace Arechi.CallVote
 
         public VoteStatus Status { get; set; } = VoteStatus.Ready;
 
-        public int CooldownTime { get; protected set; }
+        public int CooldownTime { get; set; }
 
         private Coroutine _startCoroutine;
 
