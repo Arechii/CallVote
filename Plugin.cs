@@ -24,6 +24,10 @@ namespace Arechi.CallVote
         public override TranslationList DefaultTranslations => new TranslationList
         {
             { "VOTE_CHAT_FORMAT", "[Vote: {color}{vote}{/color}] {color}{text}{/color}" },
+            { "VOTE_HELP", "You can vote or start a vote with /cvote <vote name | vote alias>" },
+            { "VOTE_HELP_READY", "Ready votes: {0}" },
+            { "VOTE_HELP_ONGOING", "Ongoing votes: {0}" },
+            { "VOTE_HELP_COOLINGDOWN", "Votes in cooldown: {0}" },
             { "START", "Started | Vote with /cv {0}" },
             { "COOLING_DOWN", "This vote is cooling down!: {0}s" },
             { "NOT_ENOUGH_ARGUMENTS", "You need at least {0} arguments to start this vote!" },

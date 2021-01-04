@@ -28,7 +28,16 @@ namespace Arechi.CallVote.Commands
 
             if (command.Length == 0)
             {
-                player.SendMessage($"/{Name} {Syntax}", Color.red);
+                var voteGroups = Plugin.Instance.Votes.GroupBy(v => v.Status);
+
+                player.SendMessage(Plugin.Instance.Translate("VOTE_HELP"));
+
+                foreach (var voteGroup in voteGroups)
+                {
+                    var text = voteGroup.Select(v => $"{v.Settings.Name} ({v.Settings.Alias}){(voteGroup.Key == VoteStatus.CoolingDown ? $" [{v.CooldownTime}s]" : "")}");
+                    player.SendMessage(Plugin.Instance.Translate($"VOTE_HELP_{voteGroup.Key.ToString().ToUpper()}", string.Join(", ", text)));
+                }
+
                 return;
             }
 
