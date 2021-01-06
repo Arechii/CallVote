@@ -85,7 +85,7 @@ namespace Arechi.CallVote
             if (Voters.Contains(player.CSteamID.m_SteamID)) return;
 
             Voters.Add(player.CSteamID.m_SteamID);
-            SendMessage("RESULT", GetPercentage(), Settings.RequiredPercent);
+            SendMessage("RESULT", GetPercentage(), Settings.RequiredPercent, Settings.Alias);
 
             if (GetResult() != VoteResult.Success) return;
 
