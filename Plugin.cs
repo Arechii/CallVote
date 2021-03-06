@@ -13,7 +13,7 @@ namespace Arechi.CallVote
         protected override void Load()
         {
             Instance = this;
-            Votes = Configuration.Instance.Votes.Select(v => new Vote(v)).ToList<IVote>();
+            Votes = Configuration.Instance.Votes.Where(v => v.Enabled).Select(v => new Vote(v)).ToList<IVote>();
         }
 
         protected override void Unload()
