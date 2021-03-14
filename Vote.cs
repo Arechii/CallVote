@@ -12,7 +12,7 @@ namespace Arechi.CallVote
 {
     public class Vote : IVote
     {
-        public VoteSettings Settings { get; set; }
+        public IVoteSettings Settings { get; set; }
 
         public List<string> Arguments { get; set; }
 
@@ -26,7 +26,7 @@ namespace Arechi.CallVote
 
         private Coroutine _cooldownCoroutine;
 
-        public Vote(VoteSettings settings)
+        public Vote(IVoteSettings settings)
         {
             Settings = settings;
         }

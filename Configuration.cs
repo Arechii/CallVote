@@ -24,10 +24,10 @@ namespace Arechi.CallVote
                 new VoteSettings("NoSnow", "ns", "/weather none"),
                 new VoteSettings("HealAll", "ha", "/healall"),
                 new VoteSettings("Airdrop", "a", "/airdrop"),
-                new VoteSettings("AirdropAll", "aa", "/airdropall"),
-                new VoteSettings("VehicleAll", "va", "/vehicleall"),
-                new VoteSettings("MaxSkills", "ms", "/maxskills"),
-                new VoteSettings("ItemAll", "ia", "/itemall")
+                new VoteSettings("AirdropAll", "aa", "/airdropall", requirePermission: true),
+                new VoteSettings("VehicleAll", "va", "/vehicleall", requirePermission: true),
+                new VoteSettings("MaxSkills", "ms", "/maxskills", requirePermission: true),
+                new VoteSettings("ItemAll", "ia", "/itemall", requirePermission: true)
             };
         }
     }

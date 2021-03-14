@@ -37,10 +37,13 @@ namespace Arechi.CallVote
         [XmlAttribute("CooldownTime")]
         public int CooldownTime { get; set; }
 
+        [XmlAttribute("RequirePermission")]
+        public bool RequirePermission { get; set; }
+
         public VoteSettings() { }
 
         public VoteSettings(string name, string alias, string command, int minArgs = 0, string color = "#fff333", string icon = "",
-            bool enabled = true, int minPlayers = 1, int reqPercent = 50, int timer = 60, int cooldown = 300)
+            bool enabled = true, int minPlayers = 1, int reqPercent = 50, int timer = 60, int cooldown = 300, bool requirePermission = false)
         {
             Name = name;
             Alias = alias;
@@ -53,6 +56,7 @@ namespace Arechi.CallVote
             RequiredPercent = reqPercent;
             Timer = timer;
             CooldownTime = cooldown;
+            RequirePermission = requirePermission;
         }
     }
 }

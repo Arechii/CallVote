@@ -61,6 +61,9 @@ namespace Arechi.CallVote.Commands
 
             try
             {
+                if (vote.Settings.RequirePermission && !player.HasPermission($"callvote.{vote.Settings.Name}"))
+                    throw new VoteStartException("NO_PERMISSION");
+
                 var arguments = command.Skip(1).ToList();
 
                 vote.Start(arguments);

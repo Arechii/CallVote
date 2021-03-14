@@ -5,7 +5,7 @@ namespace Arechi.CallVote
 {
     public interface IVote
     {
-        VoteSettings Settings { get; set; }
+        IVoteSettings Settings { get; set; }
 
         List<string> Arguments { get; set; }
 

@@ -23,5 +23,7 @@
         int Timer { get; set; }
 
         int CooldownTime { get; set; }
+
+        bool RequirePermission { get; set; }
     }
 }

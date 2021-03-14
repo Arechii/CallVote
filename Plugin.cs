@@ -32,6 +32,7 @@ namespace Arechi.CallVote
             { "COOLING_DOWN", "This vote is cooling down!: {0}s" },
             { "NOT_ENOUGH_ARGUMENTS", "You need at least {0} arguments to start this vote!" },
             { "NOT_ENOUGH_PLAYERS", "You need at least {0} players to start this vote!" },
+            { "NO_PERMISSION", "You are missing the required permission to start this vote!" },
             { "RESULT", "{0}% | Required: {1}% | Vote with /cv {2}" },
             { "FAILURE", "Failed!" },
             { "SUCCESS", "Successful!" },

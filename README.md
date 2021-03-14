@@ -33,5 +33,6 @@ Each vote can be customized even further:
 - required percent
 - timer
 - cooldown time
+- whether a permission is required to start it (callvote.\<name>)
 
 The plugin includes default values for these.
