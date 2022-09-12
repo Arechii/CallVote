@@ -1,4 +1,6 @@
-﻿using Rocket.Unturned.Player;
+﻿using Rocket.API;
+using Logger = Rocket.Core.Logging.Logger;
+using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
 
@@ -11,9 +13,12 @@ namespace Arechi.CallVote.Utils
             ChatManager.serverSendMessage(message, color ?? Color.yellow, iconURL: icon, useRichTextFormatting: true);
         }
 
-        public static void SendMessage(this UnturnedPlayer player, string message, Color? color = null)
+        public static void SendMessage(this IRocketPlayer caller, string message, Color? color = null)
         {
-            ChatManager.serverSendMessage(message, color ?? Color.yellow, toPlayer: player.SteamPlayer(), useRichTextFormatting: true);
+            if (caller is ConsolePlayer)
+                Logger.Log(message);
+            else
+                ChatManager.serverSendMessage(message, color ?? Color.yellow, toPlayer: ((UnturnedPlayer)caller).SteamPlayer(), useRichTextFormatting: true);
         }
     }
 }

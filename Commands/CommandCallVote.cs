@@ -16,7 +16,7 @@ namespace Arechi.CallVote.Commands
 
         public string Syntax => "<vote> [arguments]";
 
-        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public AllowedCaller AllowedCaller => AllowedCaller.Both;
 
         public List<string> Aliases => new List<string>() { "cvote", "cv" };
 
@@ -24,18 +24,16 @@ namespace Arechi.CallVote.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            var player = (UnturnedPlayer)caller;
-
             if (command.Length == 0)
             {
                 var voteGroups = Plugin.Instance.Votes.GroupBy(v => v.Status);
 
-                player.SendMessage(Plugin.Instance.Translate("VOTE_HELP"));
+                caller.SendMessage(Plugin.Instance.Translate("VOTE_HELP"));
 
                 foreach (var voteGroup in voteGroups)
                 {
                     var text = voteGroup.Select(v => $"{v.Settings.Name} ({v.Settings.Alias}){(voteGroup.Key == VoteStatus.CoolingDown ? $" [{v.CooldownTime}s]" : "")}");
-                    player.SendMessage(Plugin.Instance.Translate($"VOTE_HELP_{voteGroup.Key.ToString().ToUpper()}", string.Join(", ", text)));
+                    caller.SendMessage(Plugin.Instance.Translate($"VOTE_HELP_{voteGroup.Key.ToString().ToUpper()}", string.Join(", ", text)));
                 }
 
                 return;
@@ -49,29 +47,33 @@ namespace Arechi.CallVote.Commands
 
             if (vote == null)
             {
-                player.SendMessage(Plugin.Instance.Translate("VOTE_NOT_FOUND", voteName), Color.red);
+                caller.SendMessage(Plugin.Instance.Translate("VOTE_NOT_FOUND", voteName), Color.red);
                 return;
             }
 
             if (vote.Status == VoteStatus.Ongoing)
             {
-                vote.AddVote(player);
+                if (caller is UnturnedPlayer player) 
+                    vote.AddVote(player);
+
                 return;
             }
 
             try
             {
-                if (vote.Settings.RequirePermission && !player.HasPermission($"callvote.{vote.Settings.Name}"))
+                if (vote.Settings.RequirePermission && !caller.HasPermission($"callvote.{vote.Settings.Name}"))
                     throw new VoteStartException("NO_PERMISSION");
 
                 var arguments = command.Skip(1).ToList();
 
                 vote.Start(arguments);
-                vote.AddVote(player);
+                
+                if (caller is UnturnedPlayer player)
+                    vote.AddVote(player);
             }
             catch (VoteStartException ex)
             {
-                player.SendMessage(ex.Message, Color.red);
+                caller.SendMessage(ex.Message, Color.red);
             }
         }
     }
