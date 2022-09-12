@@ -23,8 +23,6 @@ namespace Arechi.CallVote
 
         private Coroutine _startCoroutine;
 
-        private Coroutine _cooldownCoroutine;
-
         public Vote(IVoteSettings settings)
         {
             Settings = settings;
@@ -116,8 +114,7 @@ namespace Arechi.CallVote
             Status = VoteStatus.CoolingDown;
 
             SendMessage("COOLDOWN", Settings.CooldownTime);
-            _cooldownCoroutine = Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
-
+            Plugin.Instance.StartCoroutine(Cooldown(Settings.CooldownTime));
             Plugin.Instance.StopCoroutine(_startCoroutine);
         }
 
