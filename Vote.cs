@@ -5,7 +5,6 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Arechi.CallVote
@@ -142,7 +141,7 @@ namespace Arechi.CallVote
             var message = Plugin.Instance.Translate("VOTE_CHAT_FORMAT")
                 .Replace("{color}", $"<color={Settings.Color}>")
                 .Replace("{/color}", "</color>")
-                .Replace("{vote}", $"{Settings.Name}{(Arguments.Any() ? " " + string.Join(" ", Arguments) : "")}")
+                .Replace("{vote}", $"{Settings.Name}{(Settings.MinimumArguments > 0 ? " " + string.Join(" ", Arguments) : "")}")
                 .Replace("{text}", Plugin.Instance.Translate(translationKey, args));
 
             ChatUtil.Broadcast(message, Settings.Icon, Color.white);
